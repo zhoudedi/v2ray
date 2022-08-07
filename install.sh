@@ -20,22 +20,22 @@ cmd="apt-get"
 sys_bit=$(uname -m)
 
 case $sys_bit in
-# i[36]86)
-# 	v2ray_bit="32"
-# 	caddy_arch="386"
-# 	;;
+i[36]86)
+	v2ray_bit="32"
+	caddy_arch="386"
+	;;
 'amd64' | x86_64)
 	v2ray_bit="64"
 	caddy_arch="amd64"
 	;;
-# *armv6*)
-# 	v2ray_bit="arm32-v6"
-# 	caddy_arch="arm6"
-# 	;;
-# *armv7*)
-# 	v2ray_bit="arm32-v7a"
-# 	caddy_arch="arm7"
-# 	;;
+*armv6*)
+	v2ray_bit="arm32-v6"
+	caddy_arch="arm6"
+	;;
+*armv7*)
+	v2ray_bit="arm32-v7a"
+	caddy_arch="arm7"
+	;;
 *aarch64* | *armv8*)
 	v2ray_bit="arm64-v8a"
 	caddy_arch="arm64"
@@ -794,7 +794,7 @@ install_v2ray() {
 			echo
 			echo -e "$red 哎呀呀...安装失败了咯...$none"
 			echo
-			echo -e " 请确保你有完整的上传 233v2.com 的 V2Ray 一键安装脚本 & 管理脚本到当前 ${green}$(pwd) $none目录下"
+			echo -e " 请确保你有完整的上传 233v2 的 V2Ray 一键安装脚本 & 管理脚本到当前 ${green}$(pwd) $none目录下"
 			echo
 			exit 1
 		fi
@@ -802,7 +802,7 @@ install_v2ray() {
 		cp -rf $(pwd)/* /etc/v2ray/233boy/v2ray
 	else
 		pushd /tmp
-		git clone https://ghproxy.com/github.com/233boy/v2ray -b "$_gitbranch" /etc/v2ray/233boy/v2ray --depth=1
+		git clone https://github.com/xyz690/v2ray -b "$_gitbranch" /etc/v2ray/233boy/v2ray --depth=1
 		popd
 
 	fi
@@ -853,7 +853,7 @@ config() {
 	# 	# 	systemctl start iptables
 	# 	# 	systemctl start ip6tables
 	# fi
-
+	
 	# systemctl restart v2ray
 	do_service restart v2ray
 	backup_config
@@ -956,7 +956,28 @@ install() {
 	get_ip
 	config
 	show_config_info
+
+	stop_firewall
 }
+
+# 简单粗暴，关闭防火墙
+stop_firewall(){
+	# 笨笨的检测系统类型方法
+	if [[ $(command -v yum) ]] && [[ $(command -v systemctl) ]]; then
+		# CentOS
+		# 关闭防火墙
+		systemctl stop firewalld
+		# 设置开机禁用防火墙
+		systemctl disable firewalld.service
+		echo -e "\n$red 该脚本已自动关闭防火墙... $none\n"
+	elif [[ $(command -v apt-get) ]] && [[ $(command -v systemctl) ]] && [[ $(command -v ufw) ]]; then
+		# Debian or Ubuntu
+		# 关闭防火墙
+		ufw disable
+		echo -e "\n$red 该脚本已自动关闭防火墙...... $none\n"
+	fi
+}
+
 uninstall() {
 
 	if [[ -f /usr/bin/v2ray/v2ray && -f /etc/v2ray/config.json ]] && [[ -f $backup && -d /etc/v2ray/233boy/v2ray ]]; then
@@ -977,7 +998,7 @@ uninstall() {
 		echo -e "
 		$red 大胸弟...你貌似毛有安装 V2Ray ....卸载个鸡鸡哦...$none
 
-		备注...仅支持卸载使用我 (233v2.com) 提供的 V2Ray 一键安装脚本
+		备注...仅支持卸载使用我 (233v2) 提供的 V2Ray 一键安装脚本
 		" && exit 1
 	fi
 
@@ -1011,11 +1032,9 @@ esac
 clear
 while :; do
 	echo
-	echo "........... V2Ray 一键安装脚本 & 管理脚本 by 233v2.com .........."
+	echo "........... V2Ray 一键安装脚本 & 管理脚本 by 233v2 .........."
 	echo
-	echo "帮助说明: https://233v2.com/post/1/"
-	echo
-	echo "搭建教程: https://233v2.com/post/2/"
+	echo "搭建教程: https://git.io/v2ray-doc"
 	echo
 	echo " 1. 安装"
 	echo
