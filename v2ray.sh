@@ -2337,7 +2337,7 @@ install_bbr() {
 	else
 		_load bbr.sh
 		_try_enable_bbr
-		[[ ! $enable_bbr ]] && bash <(curl -s -L https://github.com/teddysun/across/raw/master/bbr.sh)
+		[[ ! $enable_bbr ]] && bash <(curl -s -L https://ghproxy.com/github.com/teddysun/across/raw/master/bbr.sh)
 	fi
 }
 
@@ -2375,9 +2375,9 @@ update_v2ray() {
 }
 update_v2ray.sh() {
 	if [[ $_test ]]; then
-		local latest_version=$(curl -H 'Cache-Control: no-cache' -s -L "https://raw.githubusercontent.com/233boy/v2ray/test/v2ray.sh" | grep '_version' -m1 | cut -d\" -f2)
+		local latest_version=$(curl -H 'Cache-Control: no-cache' -s -L "https://ghproxy.com/raw.githubusercontent.com/zhoudedi/v2ray/test/v2ray.sh" | grep '_version' -m1 | cut -d\" -f2)
 	else
-		local latest_version=$(curl -H 'Cache-Control: no-cache' -s -L "https://raw.githubusercontent.com/233boy/v2ray/master/v2ray.sh" | grep '_version' -m1 | cut -d\" -f2)
+		local latest_version=$(curl -H 'Cache-Control: no-cache' -s -L "https://ghproxy.com/raw.githubusercontent.com/zhoudedi/v2ray/master/v2ray.sh" | grep '_version' -m1 | cut -d\" -f2)
 	fi
 
 	if [[ ! $latest_version ]]; then
@@ -2796,7 +2796,7 @@ reinstall)
 	if [[ $is_uninstall_v2ray ]]; then
 		cd
 		cd - >/dev/null 2>&1
-		bash <(curl -s -L https://git.io/v2ray.sh)
+		bash <(curl -s -L https://ghproxy.com/raw.githubusercontent.com/zhoudedi/v2ray/master/install.sh?v)
 	fi
 	;;
 [aA][Ii] | [Dd])
